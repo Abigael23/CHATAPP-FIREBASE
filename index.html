@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../../../bootstrap-5.2.3-dist/css/bootstrap.min.css">
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <link rel="stylesheet" href="../../../icofont/icofont/icofont.min.css">
+  <link rel="stylesheet" href="C:\Users\USER\Desktop\FIREBASE NEW\ChatApp\public\index.css">
+  <title>Document</title>
+</head>
+<body>
+  <main class="d-flex justify-content-between">
+    <h1>Welcome to your Dashboard <span id="user"></span></h1>
+    <button class="btn btn-success text-white" id="dan" onclick="logout()">Log Out</button>
+    <!-- <button>Log Out</button> -->
+  </main>
+  <main class="interface">
+    <div id="screen"></div>
+    <div class="inp">
+    <input type="text" name="" id="chatVal">
+    <button onclick="sendChat()"><i class="icofont-location-arrow"></i></button>
+  </div>
+  </main>
+</body>
+</html>
+<!-- <script type="module" src="./ChatApp/JS/main.js"></script> -->
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyB3Rfym5zbMA8DihiNOqHriYmrSkwL9Wrk",
+    authDomain: "chat-app-845ac.firebaseapp.com",
+    projectId: "chat-app-845ac",
+    storageBucket: "chat-app-845ac.appspot.com",
+    messagingSenderId: "976489294835",
+    appId: "1:976489294835:web:6cf3233c32fd76aeab8086"
+  };
+  // Initialize Firebase
+  const app = firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+</script>
+
+<script>
+  let username = document.getElementById("user")
+  let currUser;
+  firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+      var uid = user.uid;
+      username.innerHTML = user.displayName
+      currUser = user.displayName;
+      console.log(user);
+    } else {
+      window.location.href = "./SignUp.html"
+    }
+  });
+
+//LOG OUT  
+  function logout() {
+    firebase.auth().signOut().then(() => {
+      window.location.href = "./Login.html"
+  // Sign-out successful.
+}).catch((error) => {
+  // An error happened.
+});
+  }
+
+  let inpVal = document.getElementById("chatVal");
+
+  async function sendChat(){
+    console.log(currUser);
+    await db.collection("chats").doc().set({
+        name: currUser,
+        content: inpVal.value,
+    })
+    .then(() => {
+        console.log("Document successfully written!");
+        fetchChat();
+    })
+    .catch((error) => {
+        console.error("Error writing document: ", error);
+    });
+  }
+
+  async function fetchChat(){
+    await db.collection("chats")
+    .onSnapshot((doc) => {
+      console.log(doc);
+      document.getElementById("screen").innerHTML = ""
+      doc.forEach(el=>{
+        if(el.data().name == currUser){
+          console.log(el.data());
+          document.getElementById("screen").innerHTML +=`
+          <div class='screen'><small>${el.data().content} <i>${el.data().name}</i>
+            <button onclick="del('${el.id}', '${el.data().content}')">&times;</button>
+            </small>
+            <br /></div>
+        `
+        }else{
+          console.log(el.data());
+          document.getElementById("screen").innerHTML +=`
+          <div class='bg-danger rounded m-1'><small >${el.data().content} <i>${el.data().name}</i></small><br /></div>
+        `
+        }
+      })
+        // console.log("Current data: ", doc.data());
+        // screen.innerHTML += `
+        //   <small>${doc.data().content} <i>${doc.data().name}</i></small>
+        // `
+    });
+  }
+  fetchChat()
+
+  function del(id) {
+    let divContainer = document.getElementById("msg${id}")
+    console.log(divContainer);
+    db.collection("chats").doc("id").delete().then(() => {
+    console.log("Document successfully deleted!");
+}).catch((error) => {
+    console.error("Error removing document: ", error);
+});
+  }
+
+</script>
