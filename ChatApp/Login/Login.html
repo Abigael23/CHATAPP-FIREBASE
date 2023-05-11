@@ -1,80 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../../../../../bootstrap-5.2.3-dist/css/bootstrap.min.css">
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="../../../../../bootstrap-5.2.3-dist/css/bootstrap.min.css">
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <title>Document</title>
 </head>
+
 <body>
-    <main class="w-50 mx-auto mt-4 shadow p-3 rounded">
-        <form action="">
-            <h1 class="text-center text-primary">BOLD-LOGIN FORM</h1>
-            <!-- <button id="signup2" onclick="signupbutton()">SIGN UP</button> -->
-            <!-- <button id="login2" onclick="loginbutton()">LOG IN</button> -->
-            <div class="form-group text-primary">
-                <label for="">Email</label><br>
-                <input type="email" name="" id="email" class="text-info w-100 border rounded">
-            </div>
-            <div class="form-group text-primary">
-                <label for="">Password</label><br>
-                <input type="password" name="" id="password" class="text-info w-100 border rounded" placeholder="******">
-            </div>
-            <!-- <div class="form-group text-primary">
-                <label for="">Confirm Password</label><br>
-                <input type="password" name="" id="confirmpassword" class="text-info w-100 border rounded" placeholder="******">
-            </div>-->
-            <br>
-            <div class="form-group">
-            <button class="btn btn-primary w-25 text-center text-white" id="login" onclick="login(event)">LOG IN</button>
-            </div>
-        </form>
-    </main>
+  <main class="w-50 mx-auto mt-4 shadow p-3 rounded">
+    <form action="">
+      <h1 class="text-center text-primary">BOLD-LOGIN FORM</h1>
+      <div class="form-group text-primary">
+        <label for="">Email</label><br>
+        <input type="email" name="" id="email" class="text-info w-100 border rounded">
+      </div>
+      <div class="form-group text-primary">
+        <label for="">Password</label><br>
+        <input type="password" name="" id="password" class="text-info w-100 border rounded" placeholder="******">
+      </div>
+      <br>
+      <div class="form-group">
+        <button class="btn btn-primary w-25 text-center text-white" id="login" onclick="Login(event)">LOG IN</button>
+      </div>
+      <!-- <a href="../SignUp/SignUp.html"></a> -->
+    </form>
+  </main>
 </body>
 
 </html>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyB3Rfym5zbMA8DihiNOqHriYmrSkwL9Wrk",
+    authDomain: "chat-app-845ac.firebaseapp.com",
+    projectId: "chat-app-845ac",
+    storageBucket: "chat-app-845ac.appspot.com",
+    messagingSenderId: "976489294835",
+    appId: "1:976489294835:web:6cf3233c32fd76aeab8086"
+  };
+
+  const app = firebase.initializeApp(firebaseConfig);
+</script>
 
 <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyB3Rfym5zbMA8DihiNOqHriYmrSkwL9Wrk",
-      authDomain: "chat-app-845ac.firebaseapp.com",
-      projectId: "chat-app-845ac",
-      storageBucket: "chat-app-845ac.appspot.com",
-      messagingSenderId: "976489294835",
-      appId: "1:976489294835:web:6cf3233c32fd76aeab8086"
-    };
-    // Initialize Firebase
-    const app = firebase.initializeApp(firebaseConfig);
-  </script>
 
-<script>
-    // function toSignUp(ev) {
-    //   ev.preventDefault();
-    //   window.location.href = "signup.html"
-    // }
-    //let username = document.getElementById("username")
-let email = document.getElementById("email")
-let password = document.getElementById("password")
-    function login(ev) {
-        ev.preventDefault();
-        firebase.auth().createUserWithEmailAndPassword(email.value, password.value)
-      .then((userCredential) => {
-        // Signed in 
-        var user = userCredential.user;
-        alert("User informations correct");
-        console.log(user);
-        window.location.href = "../index.html"
-        // ...
-      })
-      .catch((error) => {
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        alert(errorMessage);
-        // ..
-      });
-    }
-    </script>
+  let email = document.getElementById("email")
+  let password = document.getElementById("password")
+  function Login(ev) {
+    // firebase.auth().signInWithEmailAndPassword(email.value, password.value)
+    //       .then((userCredential) => {
+    //           // Signed in
+    //           var user = userCredential.user;
+    alert("Correct User Informations");
+    //     console.log(user);
+    window.location.href = "index.html"
+    //     // ...
+    // })
+    // .catch((error) => {
+    //     var errorCode = error.code;
+    //     var errorMessage = error.message;
+    //     console.log(errorMessage);
+    //     alert(errorMessage);
+    // });
+  }
+</script>
